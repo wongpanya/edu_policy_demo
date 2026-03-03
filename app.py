@@ -17,8 +17,6 @@ try:
     from sklearn.decomposition import PCA
     from sklearn.metrics import roc_auc_score
 except Exception as e:
-    SKLEARN_OK = False
-    SKLEARN_IMPORT_ERROR = str(e)
     if not SKLEARN_OK:
     return {
         "error": "scikit-learn not available",
