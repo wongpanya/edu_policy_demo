@@ -5,45 +5,185 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-try:
-    from sklearn.linear_model import LogisticRegression, Ridge
-    SKLEARN_OK = True
-except Exception:
-    SKLEARN_OK = False
+# (ถ้ามี st.set_page_config อยู่แล้ว ใช้อันเดิมได้)
+st.set_page_config(page_title="Edu Policy Demo", layout="wide")
 
-PRIMARY_BLUE = "#6f42c1"
-PRIMARY_ORANGE = "#8d63d6"
-WHITE = "#ffffff"
-TEXT_DARK = "#2f234d"
-
-st.set_page_config(page_title="Education Equity Policy Demo (Dataset A)", page_icon="🟦🟧", layout="wide")
-
-st.markdown(
-    f"""
-    <style>
-    .block-container {{ padding-top: 1.25rem; }}
-    .tag {{
-        display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px;
-        background: {PRIMARY_ORANGE}; color: {WHITE}; font-weight: 700; font-size: 0.85rem;
-    }}
-    .card {{
-        border: 1px solid #e9e1fb; border-radius: 16px;
-        padding: 14px 16px; background: {WHITE};
-        box-shadow: 0 8px 24px rgba(93, 58, 146, 0.08);
-    }}
-    .card h3 {{ margin: 0 0 6px 0; color: {TEXT_DARK}; }}
-    .card .big {{ font-size: 1.6rem; font-weight: 900; }}
-    .muted {{ color: #6f6293; }}
-    [data-testid="stAppViewContainer"] { background: linear-gradient(180deg,#ffffff 0%,#fcfbff 55%,#faf7ff 100%); }
-    [data-testid="stSidebar"] { background: #fbf8ff; border-right: 1px solid #e9e1fb; }
-    div[data-testid="stMetric"] { background: #ffffff; border: 1px solid #e9e1fb; padding: 10px 12px; border-radius: 14px; box-shadow: 0 6px 16px rgba(93,58,146,.05); }
-    .stButton > button { background: linear-gradient(90deg,#5f35b0 0%,#7d57cb 55%,#8f6ad8 100%); color: #fff; border: 1px solid #6f42c1; border-radius: 10px; font-weight: 600; }
-    .stButton > button:hover { border-color: #5f35b0; color: #fff; }
-
-    </style>
-    """,
-    unsafe_allow_html=True,
+# -----------------------------
+# Theme selector (2 themes)
+# -----------------------------
+theme_mode = st.sidebar.radio(
+    "🎨 Theme",
+    ["Light Lavender", "Clean White"],
+    index=0
 )
+
+PALETTE = {
+    "primary": "#6f42c1",
+    "primary_dark": "#5b33a8",
+    "text": "#2f234d",
+    "border": "#e6dcff",
+    "shadow": "0 10px 28px rgba(111, 66, 193, 0.08)",
+}
+
+THEMES = {
+    "Light Lavender": {
+        "page_bg": "linear-gradient(180deg, #ffffff 0%, #fcfbff 55%, #faf7ff 100%)",
+        "section_bg": "#f7f3ff",
+        "card_bg": "#ffffff",
+        "sidebar_bg": "#f6f2ff",
+    },
+    "Clean White": {
+        "page_bg": "#ffffff",
+        "section_bg": "#fbfaff",
+        "card_bg": "#ffffff",
+        "sidebar_bg": "#faf8ff",
+    },
+}
+
+t = THEMES[theme_mode]
+
+st.markdown(f"""
+<style>
+/* ===== Page / App background ===== */
+[data-testid="stAppViewContainer"] {{
+    background: {t["page_bg"]};
+    color: {PALETTE["text"]};
+}}
+
+.main .block-container {{
+    max-width: 1280px;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+}}
+
+/* ===== Sidebar ===== */
+[data-testid="stSidebar"] {{
+    background: {t["sidebar_bg"]};
+    border-right: 1px solid {PALETTE["border"]};
+}}
+
+[data-testid="stSidebar"] * {{
+    color: {PALETTE["text"]};
+}}
+
+/* ===== Headings ===== */
+h1, h2, h3, h4 {{
+    color: {PALETTE["text"]} !important;
+    letter-spacing: -0.01em;
+}}
+
+h1 {{
+    font-weight: 700 !important;
+}}
+
+p, label, .stMarkdown, .stText {{
+    color: {PALETTE["text"]};
+}}
+
+/* ===== Buttons ===== */
+.stButton > button {{
+    border-radius: 12px !important;
+    border: 1px solid {PALETTE["border"]} !important;
+    background: linear-gradient(135deg, {PALETTE["primary"]}, #8b5cf6) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    box-shadow: {PALETTE["shadow"]};
+}}
+
+.stButton > button:hover {{
+    background: linear-gradient(135deg, {PALETTE["primary_dark"]}, #7c3aed) !important;
+    border-color: {PALETTE["primary"]} !important;
+}}
+
+/* ===== Inputs ===== */
+.stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] > div {{
+    border-radius: 10px !important;
+    border: 1px solid {PALETTE["border"]} !important;
+    background: #fff !important;
+    color: {PALETTE["text"]} !important;
+}}
+
+/* ===== Expanders ===== */
+.streamlit-expanderHeader {{
+    border-radius: 12px !important;
+    border: 1px solid {PALETTE["border"]} !important;
+    background: {t["section_bg"]} !important;
+    color: {PALETTE["text"]} !important;
+    font-weight: 600 !important;
+}}
+
+div[data-testid="stExpander"] {{
+    border: 1px solid {PALETTE["border"]} !important;
+    border-radius: 14px !important;
+    background: {t["card_bg"]};
+    box-shadow: {PALETTE["shadow"]};
+}}
+
+/* ===== Metric cards (Streamlit metrics) ===== */
+div[data-testid="metric-container"] {{
+    background: {t["card_bg"]};
+    border: 1px solid {PALETTE["border"]};
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: {PALETTE["shadow"]};
+}}
+
+div[data-testid="metric-container"] label {{
+    color: #5d4a8a !important;
+    font-weight: 600 !important;
+}}
+
+div[data-testid="metric-container"] [data-testid="stMetricValue"] {{
+    color: {PALETTE["primary_dark"]} !important;
+    font-weight: 700 !important;
+}}
+
+div[data-testid="metric-container"] [data-testid="stMetricDelta"] {{
+    color: {PALETTE["primary"]} !important;
+}}
+
+/* ===== Tabs ===== */
+button[data-baseweb="tab"] {{
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    color: {PALETTE["text"]} !important;
+    background: transparent !important;
+}}
+
+button[data-baseweb="tab"][aria-selected="true"] {{
+    background: {t["section_bg"]} !important;
+    border-color: {PALETTE["border"]} !important;
+    color: {PALETTE["primary_dark"]} !important;
+    font-weight: 700 !important;
+}}
+
+/* ===== Dataframe / tables ===== */
+[data-testid="stDataFrame"] {{
+    border: 1px solid {PALETTE["border"]};
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: {PALETTE["shadow"]};
+}}
+
+/* ===== Generic card helper (optional: use with st.markdown HTML blocks) ===== */
+.edu-card {{
+    background: {t["card_bg"]};
+    border: 1px solid {PALETTE["border"]};
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: {PALETTE["shadow"]};
+    margin-bottom: 12px;
+}}
+
+.edu-section {{
+    background: {t["section_bg"]};
+    border: 1px solid {PALETTE["border"]};
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}}
+</style>
+""", unsafe_allow_html=True)
 
 DEFAULT_XLSX = Path(__file__).resolve().parent / "Dataset_A_2558_2567.xlsx"
 
