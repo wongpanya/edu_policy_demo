@@ -11,10 +11,10 @@ try:
 except Exception:
     SKLEARN_OK = False
 
-PRIMARY_BLUE = "#1D4ED8"
-PRIMARY_ORANGE = "#F97316"
-WHITE = "#FFFFFF"
-TEXT_DARK = "#0F172A"
+PRIMARY_BLUE = "#6f42c1"
+PRIMARY_ORANGE = "#8d63d6"
+WHITE = "#ffffff"
+TEXT_DARK = "#2f234d"
 
 st.set_page_config(page_title="Education Equity Policy Demo (Dataset A)", page_icon="🟦🟧", layout="wide")
 
@@ -27,13 +27,19 @@ st.markdown(
         background: {PRIMARY_ORANGE}; color: {WHITE}; font-weight: 700; font-size: 0.85rem;
     }}
     .card {{
-        border: 1px solid rgba(15, 23, 42, 0.10); border-radius: 16px;
+        border: 1px solid #e9e1fb; border-radius: 16px;
         padding: 14px 16px; background: {WHITE};
-        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+        box-shadow: 0 8px 24px rgba(93, 58, 146, 0.08);
     }}
     .card h3 {{ margin: 0 0 6px 0; color: {TEXT_DARK}; }}
     .card .big {{ font-size: 1.6rem; font-weight: 900; }}
-    .muted {{ color: rgba(15, 23, 42, 0.65); }}
+    .muted {{ color: #6f6293; }}
+    [data-testid="stAppViewContainer"] { background: linear-gradient(180deg,#ffffff 0%,#fcfbff 55%,#faf7ff 100%); }
+    [data-testid="stSidebar"] { background: #fbf8ff; border-right: 1px solid #e9e1fb; }
+    div[data-testid="stMetric"] { background: #ffffff; border: 1px solid #e9e1fb; padding: 10px 12px; border-radius: 14px; box-shadow: 0 6px 16px rgba(93,58,146,.05); }
+    .stButton > button { background: linear-gradient(90deg,#5f35b0 0%,#7d57cb 55%,#8f6ad8 100%); color: #fff; border: 1px solid #6f42c1; border-radius: 10px; font-weight: 600; }
+    .stButton > button:hover { border-color: #5f35b0; color: #fff; }
+
     </style>
     """,
     unsafe_allow_html=True,
