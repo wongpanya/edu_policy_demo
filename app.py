@@ -19,6 +19,11 @@ try:
 except Exception as e:
     SKLEARN_OK = False
     SKLEARN_IMPORT_ERROR = str(e)
+    if not SKLEARN_OK:
+    return {
+        "error": "scikit-learn not available",
+        "detail": SKLEARN_IMPORT_ERROR or "Unknown import error"
+    }
 #--------------------------------
 # (ถ้ามี st.set_page_config อยู่แล้ว ใช้อันเดิมได้)
 st.set_page_config(page_title="Edu Policy Demo", layout="wide")
