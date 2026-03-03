@@ -19,7 +19,7 @@ try:
 except Exception as e:
     SKLEARN_OK = False
     SKLEARN_IMPORT_ERROR = str(e)
-
+#--------------------------------
 # (ถ้ามี st.set_page_config อยู่แล้ว ใช้อันเดิมได้)
 st.set_page_config(page_title="Edu Policy Demo", layout="wide")
 
