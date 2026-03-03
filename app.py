@@ -41,11 +41,9 @@ st.markdown(
     .stButton > button:hover { border-color: #5f35b0; color: #fff; }
 
     </style>
-
     """,
     unsafe_allow_html=True,
 )
-
 
 DEFAULT_XLSX = Path(__file__).resolve().parent / "Dataset_A_2558_2567.xlsx"
 
