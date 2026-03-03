@@ -5,6 +5,21 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+# --- Dependency readiness flags ---
+SKLEARN_OK = True
+SKLEARN_IMPORT_ERROR = None
+
+try:
+    from sklearn.model_selection import train_test_split  # ตัวอย่าง (ถ้าใช้)
+    from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.metrics import roc_auc_score
+except Exception as e:
+    SKLEARN_OK = False
+    SKLEARN_IMPORT_ERROR = str(e)
+
 # (ถ้ามี st.set_page_config อยู่แล้ว ใช้อันเดิมได้)
 st.set_page_config(page_title="Edu Policy Demo", layout="wide")
 
